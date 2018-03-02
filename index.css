@@ -1,40 +1,134 @@
-a:hover{
-	font-size: 20px;
-	color: red;
+#Description{
+    width: 300px;
+    background-color: lightgrey;
+    height: 20px;
+    margin-left: 20px;
 }
-
-a{
-	text-decoration: none;
-	font-size:15px;
-	color: 	blue;
-	
+#table{
+    border: 1px solid black;
+    border-collapse: collapse;
+    width: 90%;
+    margin-top: 20px;
+    margin-bottom: 15px;
+    margin-left: auto;
+    margin-right: auto;
 }
-
-ul,ol{
-	font-size:20px;
-	
+tr{
+    border: 1px solid black;
 }
-
-p {
-	font-family : "Times New Roman";
-	font-size: 20px;
+td{
+   /* border: 1px solid black;*/
+    border-left: 1px solid black;
 }
-
-.pic{
-	border:3px solid #BDBDBD;
-	padding:2px;
-	margin: 7px;
+th{
+    /*border: 1px solid black;*/
+    border-left: 1px solid black;
+    border-bottom: 1px solid black;
+    background-color: lightgrey;
+    opacity: .9;
+    cursor: pointer;
 }
-
-.pic1{
-	border:3px solid #BDBDBD;
-	padding:2px;
-}
-
 body{
-	background-repeat: no-repeat;
-	background-attachment:fixed;
-	background-size: cover;
-	background-image : url('https://hdqwalls.com/download/trees-minimalism-4k-2048x1152.jpg');
-	color: white;
+    background: url("this.jpg");
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
+}
+.completed{
+    width:20px;
+}
+.checkbox{
+
+}
+
+#datepicker{
+    background-color: lightgrey;
+    margin-top: 10px;
+    margin-bottom: 20px;
+    margin-left: 10px;
+    cursor: pointer;
+    height: 25px;
+}
+
+nav{
+    width: 100%;
+    height: 30px;
+    background-color: lightgrey;
+    padding: 0;
+    margin: 0;
+    border-radius: 25px;
+}
+
+nav a{
+    margin-left: 50px;
+    color: black;
+    text-decoration: none;
+    font-size: 22px;
+    font-family: sans-serif;
+    margin-right: 50px;
+
+}
+
+nav a:hover{
+    font-size: 25px;
+}
+
+h1{
+    text-align: center;
+    font-size: 50px;
+    color: lightgrey;
+    font-family: sans-serif;
+}
+
+h2{
+    color: lightblue;
+    font-family: sans-serif;
+    margin-left: 20px;
+
+}
+
+#pickOne{
+    background-color: lightgrey;
+    cursor: pointer;
+    height: 25px;
+    margin-left: 10px;
+}
+
+#addCat{
+    background-color: lightgrey;
+    height: 20px;
+    width: 300px;
+    margin-bottom: 10px;
+    margin-top: 10px;
+    margin-left: 20px;
+}
+
+#left{
+    margin-left: 23%;
+}
+
+#right{
+    margin-right: 23%;
+}
+
+.thisButton{
+    width: 6%;
+    hight: 10px;
+    background-color: lightblue;
+    margin-left: 10px;
+    margin-right: 10px;
+    cursor: pointer;
+    height: 25px;
+}
+
+#colorPicker{
+    margin-left: 10px;
+    cursor: pointer;
+    height: 25px;
+    padding: 0;
+    border: none;
+}
+
+#remove{
+    cursor: default;
 }

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Pictures</title>
+    <link rel="stylesheet" type="text/css" href="pictures.css">
+
+</head>
+<body>
+
+    <div id="header">
+        <nav>
+            <a id="left" href="index.html" style="float: left">TODO LIST</a>
+            <a id="right" href="pictures.html" style="float: right">Motivational Pictures</a>
+        </nav>
+    </div>
+
+    <h1>Motivational Pictures</h1>
+    <table>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <tr>
+            <td><img class="this" src="1.jpeg" onclick="change(this)"></td>
+            <td><img class="this" src="2.jpeg" onclick="change(this)"></td>
+            <td><img class="this" src="3.jpg" onclick="change(this)"></td>
+            <td><img class="this" src="4.jpeg" onclick="change(this)"></td>
+        </tr>
+        <tr>
+            <td><img class="this" src="5.jpeg" onclick="change(this)"></td>
+            <td><img class="this" src="6.jpeg" onclick="change(this)"></td>
+            <td><img class="this" src="7.jpeg" onclick="change(this)"></td>
+            <td><img class="this" src="8.jpeg" onclick="change(this)"></td>
+        </tr>
+        <tr>
+            <td><img class="this" src="9.jpeg" onclick="change(this)"></td>
+            <td><img class="this" src="10.jpeg" onclick="change(this)"></td>
+            <td><img class="this" src="11.jpeg" onclick="change(this)"></td>
+            <td><img class="this" src="12.jpeg" onclick="change(this)"></td>
+        </tr>
+        <tr>
+            <td><img class="this" src="13.jpeg" onclick="change(this)"></td>
+            <td><img class="this" src="14.jpeg" onclick="change(this)"></td>
+            <td><img class="this" src="15.jpeg" onclick="change(this)"></td>
+            <td><img class="this" src="16.jpeg" onclick="change(this)"></td>
+        </tr>
+        <tr>
+            <td><img class="this" src="17.jpeg" onclick="change(this)"></td>
+            <td><img class="this" src="18.jpeg" onclick="change(this)"></td>
+            <td><img class="this" src="19.jpeg" onclick="change(this)"></td>
+            <td><img class="this" src="20.jpeg" onclick="change(this)"></td>
+        </tr>
+    </table>
+
+    <h1>View Image:</h1>
+
+    <img id="pic" src="">
+
+    <br>
+
+
+    <script type="text/javascript">
+
+        var image = document.getElementById("pic");
+
+        function change(pic) {
+            image.src = pic.src;
+        }
+
+    </script>
+
+</body>
+</html>

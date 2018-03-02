@@ -1,61 +1,289 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
-	<title>Basic Webpage</title>
-	<link rel="stylesheet" href="index.css">
+    <meta charset="UTF-8">
+    <title>Productivity Website</title>
+    <link rel="stylesheet" type="text/css" href="index.css">
 </head>
 
 <body>
+    <div id="header">
+        <nav>
+            <a id="left" href="index.html" style="float: left">TODO LIST</a>
+            <a id="right" href="pictures.html" style="float: right">Motivational Pictures</a>
+        </nav>
+    </div>
 
-	<h1>Meet Fred:</h1>
-	
-	<img class="pic" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRqTHwSkAzVwbR-Q0x-O7xLOUQQ-DJJCA15bpqHXCPx-akwFlJZ" alt="OH SHIT!" width=auto height=500px/>
+    <h1>TODO LIST</h1>
 
-	<p>This is <b>Fred</b>.
+    <h2>Add A Category:</h2>
+    <input id="addCat" type="=text" placeholder="Enter A Category">
+    <input id="colorPicker" type="color">
+    <button class="thisButton" onclick="addCategory()">ADD</button>
 
-	</p>
-	<h1>Pitbulls:</h1>
-	<p>
-		<b>Pit bull</b> is the common name for a type of dog. Formal breeds often considered in North America
-		to be of the pit bull type include the American Pit Bull Terrier, American Staffordshire Terrier, 
-		American Bully, and Staffordshire Bull Terrier.
-	</p>
-	<h1>History</h1>
-	<p>
-		Pit bulls were created by breeding bulldogs and terriers together to produce a dog that combined the gameness and agility of the terrier with the strength of the bulldog. In the United Kingdom, these dogs were used in blood sports such as bull-baiting and bear-baiting. These blood sports were officially eliminated in 1835 as Britain began to introduce animal welfare laws. Since dogfights were cheaper to organize and far easier to conceal from the law than bull or bear baits, blood sport proponents turned to pitting their dogs against each other instead. Dog fighting was used as both a blood sport (often involving gambling) and a way to continue to test the quality of their stock. For decades afterwards, dog fighting clandestinely took place in small areas of Britain and America. In the early 20th century pit bulls were used as catch dogs in America for semi-wild cattle and hogs, to hunt, and drive livestock, and as family companions. Some have been selectively bred for their fighting prowess.
+    <h2>Add An Item:</h2>
+    <input id="Description" type="text" placeholder="Enter A Description">
 
-		Pit bulls also constitute the majority of dogs used for illegal dog fighting in America. In addition, law enforcement organisations report these dogs are used for other nefarious purposes, such as guarding illegal narcotics operations, use against police, and as attack dogs. On the other side of the law, pit bulls have been used as police dogs.
-		Pit bull/chocolate lab mix
 
-		In an effort to counter the fighting reputation of pit bull-type dogs, in 1996 the San Francisco Society for the Prevention of Cruelty to Animals renamed pit bull terriers to "St. Francis Terriers", so that people might be more likely to adopt them. 60 temperament-screened dogs were adopted until the program was halted, after several of the newly adopted pit bulls killed cats. The New York City Center for Animal Care and Control tried a similar approach in 2004, relabeling their pit bulls as "New Yorkies", but dropped the idea in the face of overwhelming public opposition.
-	</p>
-	
-	<h1>Here are some good boys</h1>
-	<br/>
-	
-	<img class="pic" src ="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQyHf1ct9wRl3Wm6CLvponwcSRgvGmMPvO6M-cVN7wyLjC6gctD" width=auto height=200px>
-	<img class="pic" src ="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRM6d_EXfx7RcwkJS1piCMx2UkWFQfAaysFaZ2oZgknGrVmvjcWUg" width=auto height=200px>
-	<img class="pic" src ="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTzBnMaS3xZew-btbAytDaDMvPn6uLH9D6Lnpn5QP-mpFqu3qtV" width=auto height=200px>
-	<img class="pic" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTq-7xLtkibWwlVe9hJw7eBULyAvBMRnH7zEOy3IiGqpDNTix0M" width=auto height=200px>
-	
-	<h1>Other Info</h1>
-	<p>
-		More information can be found at <a href="https://en.wikipedia.org/wiki/Pit_bull" style="font-size:30px;">Wikipedia</a> or click -> <a href="https://en.wikipedia.org/wiki/Pit_bull"><img class="pic1" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRKR-j1XNlmL4MbjHVzi6oOPkVy9C3dupAycLHS2ML3nI4tjq_l" height=200px width=auto></a>
-	</p>
-	
-	<p>
-		<br/>
-		<b style="font-size:30px;">Reasons why Dogs are Awesome:</b>
-		<ul>
-			<li>They are good friends.</li>
-			<li>They are good cuddle buddies.</li>
-			<li>They are the best humans.</li>
-			<li>They are so much better than cats.</li>
-			<li>Cats are assholes.</li>
-			<li>Dogs win.</li>
-		</ul>
-	</p>
-	</body>
+    <select id="pickOne">
+    </select>
 
+    <input type="datetime-local" id="datepicker">
+
+    <button class="thisButton" onclick="buttonClick()">ADD</button>
+
+
+
+    <table id="table">
+    </table>
+
+    <!--
+        TODO: style everything
+        TODO: add cookie implementation(if you have time).
+     -->
+
+    <script type="text/javascript">
+
+        //keep track of what row we are on.
+        var rowNum = 0;
+
+        //this is the object array that is printed into the table.
+        var rowArray = [];
+
+        //This is the category array.
+        var catArray = [];
+        //These are the four starting categories.
+        catArray.push({category:"Chore",color:"#FF0000"});
+        catArray.push({category:"Homework",color:"#ff845b"});
+        catArray.push({category:"Appointment",color:"#5b84ff"});
+        catArray.push({category:"Notes",color:"#fae705"});
+
+        //All of these variables are grabbing objects in the html
+        var textbox = document.getElementById("Description");
+        var table = document.getElementById("table");
+        var pickOne = document.getElementById("pickOne");
+        var datepicker = document.getElementById("datepicker");
+
+        //These Variables deal with the category stuff
+        var catTextField = document.getElementById("addCat");
+        var colorpicker = document.getElementById("colorPicker");
+
+
+
+        //This determines what happens when the webpage opens.
+        window.onload = function () {
+            updatePickOne();
+            reloadTable();
+            textbox.focus();
+        };
+
+        //All of this happens when you click the add to-do button.
+        function buttonClick() {
+            //building the object that we are putting into the object array.
+            var row = {description: "", dateAdded:"", dueDate: "", category: "", finished: ""};
+            var description = textbox.value;
+
+            if(description===""){
+                alert("Please enter a task description.");
+                textbox.focus();
+                return;
+            }
+
+            var category = pickOne.value;
+
+            //THIS IS ALL FOR GETTING CURRENT DATE AND TIME...
+            var today = new Date();
+            var dd = today.getDate();
+            var mm = today.getMonth()+1;
+            var yyyy = today.getFullYear();
+            var hour = today.getHours();
+            var min = today.getMinutes();
+            if(dd<10) {
+                dd = '0'+dd
+            }
+            if(mm<10) {
+                mm = '0'+mm
+            }
+            if(hour<10){
+                hour = '0'+hour;
+            }
+            if(min<10){
+                min='0'+min;
+            }
+            var string = yyyy + '-' + mm + "-" + dd + " "+ hour + ":" + min;
+            //THIS IS ALL FOR GETTING CURRENT DATE AND TIME
+
+            row.description = description;
+            row.dateAdded = string;
+
+            //This formats the date.
+            row.dueDate = datepicker.value;
+            row.dueDate=row.dueDate.replace("T"," ");
+
+
+            row.category = category;
+
+            //Set the finished variable to 0 since it is not done yet.(since you just added it)
+            row.finished = 0;
+
+            //add object to object array
+            rowArray.push(row);
+
+            //reload the table to show the changes
+            reloadTable();
+
+            //reset everything back to default values.
+            textbox.value = "";
+            pickOne.value = "Chore";
+            textbox.focus();
+
+            //increment to show we are on the next row.
+            rowNum++;
+        }
+
+        //This handles the checking of the boxes and goes threw the object array to change the value of the finished variable.
+        function handleClick(cb) {
+            if(cb.checked === true){
+                rowArray[cb.id].finished = 1;
+            }else{
+                rowArray[cb.id].finished = 0;
+            }
+        }
+
+        function addCategory(){
+            var catStuff ={category:"",color:""};
+            catStuff.color = colorpicker.value;
+            catStuff.category = catTextField.value;
+
+            if(catStuff.category===""){
+                alert("Please enter the name of the category that you would like to add.")
+                return;
+            }
+
+            catArray.push(catStuff);
+            updatePickOne();
+            catTextField.value = "";
+
+        }
+
+        //************************Below this are sort functions and print functions.************************
+
+        function updatePickOne() {
+            pickOne.innerHTML = "";
+            for(i=0;i<catArray.length;i++){
+                pickOne.innerHTML += "<option value="+catArray[i].category+">"+catArray[i].category+"</option>"
+            }
+        }
+
+        function sortAddTime(){
+            rowArray.sort(compareAddTime);
+            reloadTable();
+        }
+
+        function remove(bt) {
+            var blah = window.confirm("Are you sure you would like to remove that item?");
+            if(blah){
+                rowArray.splice(bt.className, 1);
+                reloadTable();
+            }
+        }
+
+        function sortDescription(){
+
+            rowArray.sort(compareDescription);
+            reloadTable();
+        }
+
+        function sortComplete(){
+            rowArray.sort(compareComplete);
+            reloadTable();
+        }
+
+        function sortDate(){
+            rowArray.sort(compareDate);
+            reloadTable();
+        }
+
+        function sortCategory(){
+            rowArray.sort(compareCategory);
+            reloadTable();
+        }
+
+        function compareDescription(a,b) {
+            if (a.description < b.description)
+                return -1;
+            if (a.description > b.description)
+                return 1;
+            return 0;
+        }
+
+        function compareDate(a,b) {
+            if (a.dueDate < b.dueDate)
+                return -1;
+            if (a.dueDate > b.dueDate)
+                return 1;
+            return 0;
+        }
+
+        function compareComplete(a,b) {
+            if (a.finished < b.finished)
+                return 1;
+            if (a.finished > b.finished)
+                return -1;
+            return 0;
+        }
+
+        function compareCategory(a,b) {
+            if (a.category < b.category)
+                return -1;
+            if (a.category > b.category)
+                return 1;
+            return 0;
+        }
+
+        function compareAddTime(a,b){
+            if (a.dateAdded < b.dateAdded)
+                return 1;
+            if (a.dateAdded > b.dateAdded)
+                return -1;
+            return 0;
+        }
+
+        function reloadTable() {
+            table.innerHTML = "<tr>\n" +
+                "            <th onclick="+"sortDescription()"+">Description:</th>\n" +
+                "            <th onclick="+"sortAddTime()"+">Date Added:</th>\n" +
+                "            <th onclick="+"sortDate()"+">Due Date:</th>\n" +
+                "            <th onclick="+"sortCategory()"+">Category:</th>\n" +
+                "            <th onclick="+"sortComplete()"+">Complete:</th>\n" +
+                "            <th id='remove'>Remove:</th>" +
+                "        </tr>";
+
+            for (var j = 0; j < rowArray.length; j++) {
+
+                if (rowArray[j].finished === 0) {
+                    var adsf = colorize(rowArray[j].category);
+                    table.innerHTML += "<tr style=background-color:"+adsf+"><td>" + rowArray[j].description + "</td><td>" + rowArray[j].dateAdded + "</td><td>" + rowArray[j].dueDate + "</td><td>" + rowArray[j].category + "</td><td class='completed'><input type='checkbox' class='checkbox' id='" + j + "' onclick='handleClick(this);'></td><td><button onclick='remove(this)' class="+j+">Remove</button></td></tr>";
+
+                }//if
+                else {
+                    var adsf = colorize(rowArray[j].category);
+                    table.innerHTML += "<tr style=background-color:"+adsf+"><td>" + rowArray[j].description + "</td><td>" + rowArray[j].dateAdded + "</td><td>" + rowArray[j].dueDate + "</td><td>" + rowArray[j].category + "</td><td class='completed'><input type='checkbox' class='checkbox' id='" + j + "' onclick='handleClick(this);' checked></td><td><button onclick='remove(this)' class="+j+">Remove</button></td></tr>";
+
+                }
+            }
+        }
+
+        function colorize(category){
+            for(i=0;i<catArray.length;i++){
+
+                if(catArray[i].category === category){
+                    return catArray[i].color;
+                }
+            }
+        }
+
+    </script>
+</body>
 </html>
