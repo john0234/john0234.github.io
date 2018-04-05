@@ -32,11 +32,11 @@
 </div>
 
 <div>
-    <p style="float: left; margin-left: 10px">Give Me Data Since This Date: </p>
-    <input type="date" ng-model="date_picker" style="float: left; margin-left: 10px">
+    <p style="float: left; margin-left: 10px">Give Me Data Since This Date/Time: </p>
+    <input type="datetime-local" ng-model="date_picker" style="float: left; margin-left: 10px; width: 17%">
     <button ng-model="button" ng-click="request(date_picker,value_input)" style="margin-left: 10px">Update</button>
     <p style="float: left; margin-left: 10px;">Values Greater Than:</p>
-    <input type="text" ng-model="value_input" style="float: left; margin-left: 10px;">
+    <input type="text" ng-model="value_input" style="float: left; margin-left: 10px; width: 5%;">
     {{date}}
 </div>
 
@@ -82,7 +82,7 @@
 
 </div>
 
-<div id="map" style="width: 50%; float:left; margin-left: 10px; clear: left;"></div>
+<div id="map" style="width: 50%; float:left; margin-left: 10px; clear: left; margin-top: 10px"></div>
 <div style="float: right; width: 45%;margin-right: 10px; overflow: scroll; height: 85%; margin-top: 10px">
     <table style="border: 1px solid black; width: 100%;">
         <tr>
