@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html ng-app="ngMapComponentsApp">
+
+<head>
+
+    <title>Place Autocomplete</title>
+
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+
+    <link rel="stylesheet" href="app.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <script src="angular.min.js"></script>
+</head>
+
+<body ng-controller="ctr1" ng-init="initMap()">
+
+<nav class="navbar navbar-inverse">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#">WebApp</a>
+        </div>
+        <ul class="nav navbar-nav">
+            <li><a href="index.html">WebApp</a></li>
+            <li><a href="about.html">About Us</a></li>
+        </ul>
+    </div>
+</nav>
+
+<div class="jumbotron container-fluid" style="text-align: center">
+    <h1>Our Project</h1>
+</div>
+
+<div>
+    <p style="float: left; margin-left: 10px">Give Me Data Since This Date: </p><input type="date" ng-model="date" style="float: left; margin-left: 10px"> <button ng-model="button" ng-click="request()" style="margin-left: 10px">Update</button>
+    {{date}}
+</div>
+
+<div class="pac-card" id="pac-card">
+
+    <div>
+
+        <div id="title">
+            Autocomplete search
+        </div>
+
+        <div id="type-selector" class="pac-controls">
+
+            <input type="radio" name="type" id="changetype-all" checked="checked">
+            <label for="changetype-all">All</label>
+
+            <input type="radio" name="type" id="changetype-establishment">
+            <label for="changetype-establishment">Establishments</label>
+
+            <input type="radio" name="type" id="changetype-address">
+            <label for="changetype-address">Addresses</label>
+
+            <input type="radio" name="type" id="changetype-geocode">
+            <label for="changetype-geocode">Geocodes</label>
+
+        </div>
+
+
+        <div id="strict-bounds-selector" class="pac-controls">
+
+            <input type="checkbox" id="use-strict-bounds" value="">
+            <label for="use-strict-bounds">Strict Bounds</label>
+
+        </div>
+
+    </div>
+
+    <div id="pac-container">
+
+        <input id="pac-input" type="text" ng-model="location"
+               placeholder="Enter a location">
+    </div>
+
+</div>
+
+<div id="map" style="width: 50%; float:left; margin-left: 10px; clear: left;"></div>
+
+<table style="float: right; width: 45%; border: 1px solid black; margin-right: 10px;">
+    <tr>
+        <th>Particle</th>
+        <th>Measurement</th>
+        <th>Date</th>
+        <th>Location</th>
+    </tr>
+    <tr ng-repeat="x in measurements">
+        <td>{{x.particle}}</td>
+        <td>{{x.measurement}}</td>
+        <td>{{x.date}}</td>
+        <td>{{x.coords}}</td>
+    </tr>
+</table>
+
+<div id="infowindow-content">
+
+    <img src="" width="16" height="16" id="place-icon">
+    <span id="place-name"  class="title"></span><br>
+    <span id="place-address"></span>
+
+</div>
+
+<br>
+<br>
+<br>
+
+
+
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBuL-fvy0kZUlbAvX3RG9zdeRmWjnt1PU8&libraries=geometry,places&callback=initMap"
+        async defer></script>
+
+<!--<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBuL-fvy0kZUlbAvX3RG9zdeRmWjnt1PU8&libraries=geometry,places"
+        async defer></script>-->
+
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"
+        integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+        crossorigin="anonymous"></script>
+
+<script src="test.js" type="text/javascript"></script>
+
+</body>
+</html>
