@@ -177,46 +177,37 @@ app.controller('ctr1', function ($scope) {
 
         $scope.bounds = $scope.map.getBounds();
         $scope.center = $scope.map.getCenter();
-        if ($scope.bounds && $scope.center) {
-            $scope.ne = $scope.bounds.getNorthEast();
-            // Calculate radius (in meters).
-            $scope.radius = google.maps.geometry.spherical.computeDistanceBetween($scope.center, $scope.ne);
-        }
 
-        var interval = setInterval(function () {
+        $scope.ne = $scope.bounds.getNorthEast();
 
-            if($scope.radius !== undefined){
+        $scope.radius = google.maps.geometry.spherical.computeDistanceBetween($scope.center, $scope.ne);
 
-                clearInterval(interval);
-                buildURL();
+        buildURL();
 
-                //TODO: create the array to display in the table
+        //TODO: create the array to display in the table
 
-                $.getJSON($scope.url, function(data) {
+        $.getJSON($scope.url, function(data) {
 
-                    //console.log(data);
-                    $scope.measurements = [];
 
-                    for(i = 0; i < data.results.length; i++){
-                        $scope.formatted_JSON = {particle:'',measurement:'',date:'',coords:''};
-                        $scope.data=data.results[i];
-                        $scope.latlng = {lat: $scope.data.coordinates.latitude, lng:$scope.data.coordinates.longitude};
-                        $scope.formatted_JSON.particle = $scope.data.parameter;
-                        $scope.formatted_JSON.measurement = $scope.data.value;
-                        $scope.formatted_JSON.date = "04/4/2018";
-                        $scope.formatted_JSON.coords = "" + $scope.data.coordinates.latitude + "," + $scope.data.coordinates.longitude;
+            $scope.measurements = [];
 
-                        addMarker($scope.latlng);
+            for(i = 0; i < data.results.length; i++){
+                $scope.formatted_JSON = {particle:'',measurement:'',date:'',coords:''};
+                $scope.data=data.results[i];
+                $scope.latlng = {lat: $scope.data.coordinates.latitude, lng:$scope.data.coordinates.longitude};
+                $scope.formatted_JSON.particle = $scope.data.parameter;
+                $scope.formatted_JSON.measurement = $scope.data.value;
+                $scope.formatted_JSON.date = "04/4/2018";
+                $scope.formatted_JSON.coords = "" + $scope.data.coordinates.latitude + "," + $scope.data.coordinates.longitude;
 
-                        $scope.measurements.push($scope.formatted_JSON);
+                addMarker($scope.latlng);
 
-                    }
+                $scope.measurements.push($scope.formatted_JSON);
 
-                });
-
+                $scope.$apply();
             }
 
-        },500);
+        });
 
     }
 
@@ -243,6 +234,7 @@ app.controller('ctr1', function ($scope) {
 
                 $scope.measurements.push($scope.formatted_JSON);
             }
+            $scope.$apply();
         });
     }
 
@@ -264,8 +256,6 @@ app.controller('ctr1', function ($scope) {
         if($scope.date_picker !== undefined){
             $scope.url += "" //TODO: double check API
         }
-
     }
-
 });
 

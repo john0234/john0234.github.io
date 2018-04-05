@@ -83,21 +83,22 @@
 </div>
 
 <div id="map" style="width: 50%; float:left; margin-left: 10px; clear: left;"></div>
-
-<table style="float: right; width: 45%; border: 1px solid black; margin-right: 10px;">
-    <tr>
-        <th>Particle</th>
-        <th>Measurement</th>
-        <th>Date</th>
-        <th>Location</th>
-    </tr>
-    <tr ng-repeat="x in measurements">
-        <td>{{x.particle}}</td>
-        <td>{{x.measurement}}</td>
-        <td>{{x.date}}</td>
-        <td>{{x.coords}}</td>
-    </tr>
-</table>
+<div style="float: right; width: 45%;margin-right: 10px; overflow: scroll; height: 85%; margin-top: 10px">
+    <table style="border: 1px solid black; width: 100%;">
+        <tr>
+            <th style="text-align: center">Particle</th>
+            <th style="text-align: center">Measurement</th>
+            <th style="text-align: center;">Date</th>
+            <th style="text-align: center">Location</th>
+        </tr>
+        <tr ng-repeat="x in measurements">
+            <td>{{x.particle}}</td>
+            <td>{{x.measurement}}</td>
+            <td>{{x.date}}</td>
+            <td>{{x.coords}}</td>
+        </tr>
+    </table>
+</div>
 
 <div id="infowindow-content">
 
