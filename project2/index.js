@@ -149,60 +149,54 @@ app.controller('ctr1', function ($scope) {
         {
             clearInterval(google_interval);
             $scope.map = map;
-            // your code here!!!
-            //console.log("CONTROLLER: -> ", map.getCenter().lat());
 
-            $scope.bounds = $scope.map.getBounds();
-            $scope.center = $scope.map.getCenter();
-            if ($scope.bounds && $scope.center) {
-                $scope.ne = $scope.bounds.getNorthEast();
-                // Calculate radius (in meters).
-                $scope.radius = google.maps.geometry.spherical.computeDistanceBetween($scope.center, $scope.ne);
-            }
-
-            var interval = setInterval(function () {
-
-                if($scope.radius !== undefined){
-
-                    clearInterval(interval);
-                    $scope.url = "https://api.openaq.org/v1/measurements?coordinates="+ $scope.map.getCenter().lat()+","+ $scope.map.getCenter().lng()+"&radius="+$scope.radius+"&date_from="+"2018-4-4";
-                    //TODO: create the array to display in the table
-
-                    $scope.measurements = [];
-
-                    $.getJSON($scope.url, function(data) {
-
-                        removeMarkers();
-
-                        for(i = 0; i < data.results.length; i++){
-                            $scope.formatted_JSON = {particle:'',measurement:'',date:'',coords:''};
-                            $scope.data=data.results[i];
-                            $scope.latlng = {lat: $scope.data.coordinates.latitude, lng:$scope.data.coordinates.longitude};
-                            $scope.formatted_JSON.particle = $scope.data.parameter;
-                            $scope.formatted_JSON.measurement = $scope.data.value;
-                            $scope.formatted_JSON.date = "04/4/2018";
-                            $scope.formatted_JSON.coords = "" + $scope.data.coordinates.latitude + "," + $scope.data.coordinates.longitude;
-
-                            addMarker($scope.latlng);
-
-                            $scope.measurements.push($scope.formatted_JSON);
-
-                        }
-
-                    });
-                }
-
-            },500);
+            //this essentially sets up the map window with the API call.
+            panReset();
 
             $scope.map.addListener('dragend', function(){
-                //geocodeLatLong($scope.map,geocoder,infowindow,input);
-                $scope.url = "https://api.openaq.org/v1/measurements?coordinates="+ $scope.map.getCenter().lat()+","+ $scope.map.getCenter().lng()+"&radius="+$scope.radius+"&date_from="+"2018-4-4";
+                //this keeps same radius
+                dragReset();
+            });
+
+            $scope.map.addListener('zoom_changed',function () {
+                //this completely resets the map window with the information from the api... again
+                panReset();
+            });
+        }
+    }, 500);
+
+    function addMarker(location) {
+        marker = new google.maps.Marker({
+            position: location,
+            map:$scope.map
+        });
+        markers.push(marker);
+    }
+
+    function panReset(){
+
+        $scope.bounds = $scope.map.getBounds();
+        $scope.center = $scope.map.getCenter();
+        if ($scope.bounds && $scope.center) {
+            $scope.ne = $scope.bounds.getNorthEast();
+            // Calculate radius (in meters).
+            $scope.radius = google.maps.geometry.spherical.computeDistanceBetween($scope.center, $scope.ne);
+        }
+
+        var interval = setInterval(function () {
+
+            if($scope.radius !== undefined){
+
+                clearInterval(interval);
+                buildURL();
+
                 //TODO: create the array to display in the table
+
                 $.getJSON($scope.url, function(data) {
 
-                    removeMarkers();
-                    $scope.measurements = [];
                     //console.log(data);
+                    $scope.measurements = [];
+
                     for(i = 0; i < data.results.length; i++){
                         $scope.formatted_JSON = {particle:'',measurement:'',date:'',coords:''};
                         $scope.data=data.results[i];
@@ -215,65 +209,62 @@ app.controller('ctr1', function ($scope) {
                         addMarker($scope.latlng);
 
                         $scope.measurements.push($scope.formatted_JSON);
+
                     }
 
                 });
-            });
 
-            $scope.map.addListener('zoom_changed',function () {
+            }
 
-                $scope.bounds = $scope.map.getBounds();
-                $scope.center = $scope.map.getCenter();
-                if ($scope.bounds && $scope.center) {
-                    $scope.ne = $scope.bounds.getNorthEast();
-                    // Calculate radius (in meters).
-                    $scope.radius = google.maps.geometry.spherical.computeDistanceBetween($scope.center, $scope.ne);
-                }
+        },500);
 
-                var interval = setInterval(function () {
-
-                    if($scope.radius !== undefined){
-
-                        clearInterval(interval);
-                        $scope.url = "https://api.openaq.org/v1/measurements?coordinates="+ $scope.map.getCenter().lat()+","+ $scope.map.getCenter().lng()+"&radius="+$scope.radius+"&date_from="+"2018-4-4";
-                        //TODO: create the array to display in the table
-
-                        $.getJSON($scope.url, function(data) {
-
-                            //console.log(data);
-                            $scope.measurements = [];
-
-                            for(i = 0; i < data.results.length; i++){
-                                $scope.formatted_JSON = {particle:'',measurement:'',date:'',coords:''};
-                                $scope.data=data.results[i];
-                                $scope.latlng = {lat: $scope.data.coordinates.latitude, lng:$scope.data.coordinates.longitude};
-                                $scope.formatted_JSON.particle = $scope.data.parameter;
-                                $scope.formatted_JSON.measurement = $scope.data.value;
-                                $scope.formatted_JSON.date = "04/4/2018";
-                                $scope.formatted_JSON.coords = "" + $scope.data.coordinates.latitude + "," + $scope.data.coordinates.longitude;
-
-                                addMarker($scope.latlng);
-
-                                $scope.measurements.push($scope.formatted_JSON);
-
-                            }
-
-                        });
-
-                    }
-
-                },500);
-
-            });
-        }
-    }, 500);
-
-    function addMarker(location) {
-        marker = new google.maps.Marker({
-            position: location,
-            map:$scope.map
-        });
-        markers.push(marker);
     }
+
+    function dragReset() {
+        //geocodeLatLong($scope.map,geocoder,infowindow,input);
+        $scope.measurements = [];
+        removeMarkers();
+
+        //This builds URL based on if there is input in the necessary fields
+        buildURL();
+
+        $.getJSON($scope.url, function(data) {
+            //console.log(data);
+            for(i = 0; i < data.results.length; i++){
+                $scope.formatted_JSON = {particle:'',measurement:'',date:'',coords:''};
+                $scope.data=data.results[i];
+                $scope.latlng = {lat: $scope.data.coordinates.latitude, lng:$scope.data.coordinates.longitude};
+                $scope.formatted_JSON.particle = $scope.data.parameter;
+                $scope.formatted_JSON.measurement = $scope.data.value;
+                $scope.formatted_JSON.date = "04/4/2018";
+                $scope.formatted_JSON.coords = "" + $scope.data.coordinates.latitude + "," + $scope.data.coordinates.longitude;
+
+                addMarker($scope.latlng);
+
+                $scope.measurements.push($scope.formatted_JSON);
+            }
+        });
+    }
+
+    $scope.request = function (date_picker,value_input) {
+        //This sets these variables so we are able to check them when building the URL...
+        $scope.date_picker = date_picker;
+        $scope.value_input = value_input;
+
+    };
+
+    function buildURL(){
+        //TODO: grab the inputs from the $scope.request
+        $scope.url = "https://api.openaq.org/v1/measurements?coordinates="+ $scope.map.getCenter().lat()+","+ $scope.map.getCenter().lng()+"&radius="+$scope.radius+"&date_from="+"2018-4-4";
+
+        if($scope.value_input !== undefined){
+            $scope.url += "" //TODO: double check API
+        }
+        if($scope.date_picker !== undefined){
+            $scope.url += "" //TODO: double check API
+        }
+
+    }
+
 });
 
