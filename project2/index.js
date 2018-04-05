@@ -83,30 +83,6 @@ function initMap() {
         infowindow.open(map, marker);
     });
 
-    // Sets a listener on a radio button to change the filter type on Places
-    // Autocomplete.
-    /*
-        //TODO: also, do we need this?
-        function setupClickListener(id, types) {
-            var radioButton = document.getElementById(id);
-            radioButton.addEventListener('click', function() {
-                autocomplete.setTypes(types);
-            });
-        }
-
-        //TODO: why is this here?
-        setupClickListener('changetype-all', []);
-        setupClickListener('changetype-address', ['address']);
-        setupClickListener('changetype-establishment', ['establishment']);
-        setupClickListener('changetype-geocode', ['geocode']);
-    */
-
-/*    document.getElementById('use-strict-bounds')
-        .addEventListener('click', function() {
-            console.log('Checkbox clicked! New state=' + this.checked);
-            autocomplete.setOptions({strictBounds: this.checked});
-        });
-*/
     map.addListener('dragend', function(){
         geocodeLatLong(map,geocoder,infowindow,input);
     });
@@ -157,6 +133,7 @@ app.controller('ctr1', function ($scope) {
         {
             clearInterval(google_interval);
             $scope.map = map;
+
             panReset();
 
             //this essentially sets up the map window with the API call.
@@ -200,7 +177,6 @@ app.controller('ctr1', function ($scope) {
 
     function panReset(){
 
-        removeMarkers();
         $scope.bounds = $scope.map.getBounds();
         $scope.center = $scope.map.getCenter();
 
@@ -208,32 +184,8 @@ app.controller('ctr1', function ($scope) {
 
         $scope.radius = google.maps.geometry.spherical.computeDistanceBetween($scope.center, $scope.ne);
 
-        buildURL();
-
-        //TODO: create the array to display in the table
-
-        $.getJSON($scope.url, function(data) {
-
-
-            $scope.measurements = [];
-
-            for(i = 0; i < data.results.length; i++){
-                $scope.formatted_JSON = {particle:'',measurement:'',date:'',coords:''};
-                $scope.data=data.results[i];
-                $scope.latlng = {lat: $scope.data.coordinates.latitude, lng:$scope.data.coordinates.longitude};
-                $scope.formatted_JSON.particle = $scope.data.parameter;
-                $scope.formatted_JSON.measurement = $scope.data.value;
-                $scope.formatted_JSON.date = "04/4/2018";
-                $scope.formatted_JSON.coords = "" + $scope.data.coordinates.latitude + "," + $scope.data.coordinates.longitude;
-
-                addMarker($scope.latlng);
-
-                $scope.measurements.push($scope.formatted_JSON);
-
-
-            }
-            $scope.$apply();
-        });
+        //We do the same thing except change the radius so no need have it 2 places
+        dragReset();
 
     }
 
@@ -241,12 +193,10 @@ app.controller('ctr1', function ($scope) {
 
         removeMarkers();
         $scope.measurements = [];
-
-        //This builds URL based on if there is input in the necessary fields
         buildURL();
 
         $.getJSON($scope.url, function(data) {
-            //console.log(data);
+
             for(i = 0; i < data.results.length; i++){
                 //initialize data so we can use it more simply
                 $scope.data=data.results[i];
@@ -267,13 +217,13 @@ app.controller('ctr1', function ($scope) {
         });
     }
 
-    $scope.request = function (map,date_picker,value_input,arr) {
+    $scope.request = function (map,date_picker,from_value,to_value,arr) {
         //This sets these variables so we are able to check them when building the URL...
         $scope.date_picker = date_picker;
-        $scope.value_input = value_input;
+        $scope.from_value = from_value;
+        $scope.to_value = to_value;
         $scope.map = map;
         searchParams = arr;
-        buildURL();
         panReset();
 
         //TODO search through array to get which particles to seach for.
@@ -286,15 +236,20 @@ app.controller('ctr1', function ($scope) {
         $scope.url = "https://api.openaq.org/v1/measurements?coordinates="+ $scope.map.getCenter().lat()+","+ $scope.map.getCenter().lng()+"&radius="+$scope.radius+"&date_from="+"2018-4-4";
 
 
-        if($scope.value_input !== undefined){
-            $scope.url += "&value_from="+$scope.value_input;
+        if($scope.from_value !== undefined){
+            $scope.url += "&value_from="+$scope.from_value;
         }
 
-        /*
-        if($scope.date_picker !== undefined){
-            $scope.url += "" //TODO: double check API, sift through data & stuff
+        if($scope.to_value !== undefined){
+            $scope.url += "&value_to="+$scope.to_value
         }
-        */
+
+        if($scope.date_picker !== undefined){
+            //$scope.url += "" //TODO: double check API, sift through data & stuff
+
+            console.log($scope.date_picker);
+        }
+
 
         if(searchParams)
         {
@@ -364,8 +319,9 @@ app.controller('ctr1', function ($scope) {
                 }
             }
         }
-        console.log($scope.url);
 
+        console.log($scope.url);
     }
+
 });
 
