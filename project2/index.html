@@ -10,7 +10,7 @@
 
     <link rel="stylesheet" href="app.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-    <script src="angular.min.js"></script>
+
 </head>
 
 <body ng-controller="ctr1" ng-init="initMap()">
@@ -34,19 +34,20 @@
 <div style="clear: right">
     <p style="float: left; margin-left: 10px">Give Me Data Since This Date/Time: </p>
     <input type="datetime-local" ng-model="date_picker" style="float: left; margin-left: 10px; width: 17%">
-    <button ng-model="button" ng-click="request(date_picker,value_input, [co])" style="margin-left: 10px">Update</button>
+    <button ng-model="button" ng-click="request(map,date_picker,value_input,[co,so2,pm25,pm10,o3,no2,bc])" style="margin-left: 10px">Update</button>
     <p style="float: left; margin-left: 10px;">Values Greater Than:</p>
     <input type="text" ng-model="value_input" style="float: left; margin-left: 10px; width: 5%;">
     {{date}}
 </div>
 
 <div style="float:left; margin-top: 10px; clear: both">
-    <p style="font-size: 150%">Which Particles Would You Like In The Search?</p>
-    <p style="display: inline;">co:</p><input type="checkbox" ng-model="co">
-    <p style="display: inline;">so2:</p><input type="checkbox" ng-model="co">
-    <p style="display: inline;">pm25:</p> <input type="checkbox" ng-model="co">
-    <p style="display: inline;">pm10:</p> <input type="checkbox" ng-model="co">
-    <p style="display: inline;">o3:</p> <input type="checkbox" ng-model="co">
+    <p style="display: inline; margin-left: 10px">co:</p><input type="checkbox" ng-model="co">
+    <p style="display: inline;">so2:</p><input type="checkbox" ng-model="so2">
+    <p style="display: inline;">pm25:</p> <input type="checkbox" ng-model="pm25">
+    <p style="display: inline;">pm10:</p> <input type="checkbox" ng-model="pm10">
+    <p style="display: inline;">o3:</p> <input type="checkbox" ng-model="o3">
+    <p style="display: inline;">no2:</p> <input type="checkbox" ng-model="no2">
+    <p style="display: inline;">bc:</p> <input type="checkbox" ng-model="bc">
 </div>
 
 <div class="pac-card" id="pac-card">
@@ -55,30 +56,6 @@
 
         <div id="title">
             Autocomplete search
-        </div>
-
-        <div id="type-selector" class="pac-controls">
-
-            <input type="radio" name="type" id="changetype-all" checked="checked">
-            <label for="changetype-all">All</label>
-
-            <input type="radio" name="type" id="changetype-establishment">
-            <label for="changetype-establishment">Establishments</label>
-
-            <input type="radio" name="type" id="changetype-address">
-            <label for="changetype-address">Addresses</label>
-
-            <input type="radio" name="type" id="changetype-geocode">
-            <label for="changetype-geocode">Geocodes</label>
-
-        </div>
-
-
-        <div id="strict-bounds-selector" class="pac-controls">
-
-            <input type="checkbox" id="use-strict-bounds" value="">
-            <label for="use-strict-bounds">Strict Bounds</label>
-
         </div>
 
     </div>
@@ -91,7 +68,7 @@
 
 </div>
 
-<div id="map" style="width: 50%; float:left; margin-left: 10px; clear: left; margin-top: 10px"></div>
+<div id="map" ng-model="map" style="width: 50%; float:left; margin-left: 10px; clear: left; margin-top: 10px"></div>
 <div style="float: right; width: 45%;margin-right: 10px; overflow: scroll; height: 85%; margin-top: 10px">
     <table style="border: 1px solid black; width: 100%;">
         <tr>
@@ -121,14 +98,9 @@
 <br>
 <br>
 
-
-
+<script src="angular.min.js"></script>
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBuL-fvy0kZUlbAvX3RG9zdeRmWjnt1PU8&libraries=geometry,places&callback=initMap"
         async defer></script>
-
-<!--<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBuL-fvy0kZUlbAvX3RG9zdeRmWjnt1PU8&libraries=geometry,places"
-        async defer></script>-->
-
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"
         integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
         crossorigin="anonymous"></script>

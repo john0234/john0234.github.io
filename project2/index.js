@@ -25,8 +25,8 @@ function initMap() {
 
     var card = document.getElementById('pac-card');
     var input = document.getElementById('pac-input');
-    var types = document.getElementById('type-selector');
-    var strictBounds = document.getElementById('strict-bounds-selector');
+    //var types = document.getElementById('type-selector');
+    //var strictBounds = document.getElementById('strict-bounds-selector');
 
     map.controls[google.maps.ControlPosition.TOP_RIGHT].push(card);
 
@@ -47,6 +47,7 @@ function initMap() {
         infowindow.close();
         marker.setVisible(false);
         var place = autocomplete.getPlace();
+
 
 
         if (!place.geometry) {
@@ -100,12 +101,12 @@ function initMap() {
         setupClickListener('changetype-geocode', ['geocode']);
     */
 
-    document.getElementById('use-strict-bounds')
+/*    document.getElementById('use-strict-bounds')
         .addEventListener('click', function() {
             console.log('Checkbox clicked! New state=' + this.checked);
             autocomplete.setOptions({strictBounds: this.checked});
         });
-
+*/
     map.addListener('dragend', function(){
         geocodeLatLong(map,geocoder,infowindow,input);
     });
@@ -133,6 +134,8 @@ function geocodeLatLong(map,geocoder,infowindow,input){
 var app = angular.module('ngMapComponentsApp', []);
 
 var markers = [];
+var markerLocations = [];
+var infoWindows = [];
 
 function removeMarkers(){
     for (var i = 0; i < markers.length; i++) {
@@ -143,15 +146,20 @@ function removeMarkers(){
 
 app.controller('ctr1', function ($scope) {
 
+    var searchParams = [];
+    for(i = 0; i < 7; i ++){
+        searchParams[i] = false;
+    }
+
     var google_interval = setInterval(function() {
 
         if(map !== undefined)
         {
             clearInterval(google_interval);
             $scope.map = map;
+            panReset();
 
             //this essentially sets up the map window with the API call.
-            panReset();
 
             $scope.map.addListener('dragend', function(){
                 //this keeps same radius
@@ -165,16 +173,34 @@ app.controller('ctr1', function ($scope) {
         }
     }, 500);
 
+/*
+    //TODO:
+
+    function addInfoWindow(information) {
+
+        infowindow = new google.maps.InfoWindow({
+            position: information.location,
+            content: information.measurement + " " information.value
+        });
+
+        marker.addListener('hover', function(){
+            infowindow.open($scope.map,marker);
+        });
+    }
+
+*/
     function addMarker(location) {
         marker = new google.maps.Marker({
             position: location,
             map:$scope.map
         });
+        markerLocations.push(location);
         markers.push(marker);
     }
 
     function panReset(){
 
+        removeMarkers();
         $scope.bounds = $scope.map.getBounds();
         $scope.center = $scope.map.getCenter();
 
@@ -204,17 +230,17 @@ app.controller('ctr1', function ($scope) {
 
                 $scope.measurements.push($scope.formatted_JSON);
 
-                $scope.$apply();
-            }
 
+            }
+            $scope.$apply();
         });
 
     }
 
     function dragReset() {
-        //geocodeLatLong($scope.map,geocoder,infowindow,input);
-        $scope.measurements = [];
+
         removeMarkers();
+        $scope.measurements = [];
 
         //This builds URL based on if there is input in the necessary fields
         buildURL();
@@ -222,15 +248,18 @@ app.controller('ctr1', function ($scope) {
         $.getJSON($scope.url, function(data) {
             //console.log(data);
             for(i = 0; i < data.results.length; i++){
-                $scope.formatted_JSON = {particle:'',measurement:'',date:'',coords:''};
+                //initialize data so we can use it more simply
                 $scope.data=data.results[i];
                 $scope.latlng = {lat: $scope.data.coordinates.latitude, lng:$scope.data.coordinates.longitude};
+                //adds marker of current result
+                addMarker($scope.latlng);
+
+                //puts data from current result into JSON format to use to interate through table
+                $scope.formatted_JSON = {particle:'',measurement:'',date:'',coords:''};
                 $scope.formatted_JSON.particle = $scope.data.parameter;
                 $scope.formatted_JSON.measurement = $scope.data.value;
                 $scope.formatted_JSON.date = "04/4/2018";
                 $scope.formatted_JSON.coords = "" + $scope.data.coordinates.latitude + "," + $scope.data.coordinates.longitude;
-
-                addMarker($scope.latlng);
 
                 $scope.measurements.push($scope.formatted_JSON);
             }
@@ -238,24 +267,105 @@ app.controller('ctr1', function ($scope) {
         });
     }
 
-    $scope.request = function (date_picker,value_input) {
-
+    $scope.request = function (map,date_picker,value_input,arr) {
         //This sets these variables so we are able to check them when building the URL...
         $scope.date_picker = date_picker;
         $scope.value_input = value_input;
+        $scope.map = map;
+        searchParams = arr;
+        buildURL();
+        panReset();
+
+        //TODO search through array to get which particles to seach for.
 
     };
 
     function buildURL(){
         //TODO: grab the inputs from the $scope.request
+
         $scope.url = "https://api.openaq.org/v1/measurements?coordinates="+ $scope.map.getCenter().lat()+","+ $scope.map.getCenter().lng()+"&radius="+$scope.radius+"&date_from="+"2018-4-4";
 
+
         if($scope.value_input !== undefined){
-            $scope.url += "" //TODO: double check API
+            $scope.url += "&value_from="+$scope.value_input;
         }
+
+        /*
         if($scope.date_picker !== undefined){
-            $scope.url += "" //TODO: double check API
+            $scope.url += "" //TODO: double check API, sift through data & stuff
         }
+        */
+
+        if(searchParams)
+        {
+            var count = 0;
+
+            for(i=0; i<7; i++){
+                if(searchParams[i] === true){
+                    count++;
+                }
+            }
+
+            if( searchParams[0] === true){
+                if(count === 1){
+                    $scope.url += "&parameter=co";
+                }
+                else{
+                    $scope.url+="&parameter[]=co";
+                }
+            }
+            if(searchParams[1] === true){
+                if(count === 1){
+                    $scope.url += "&parameter=so2";
+                }
+                else{
+                    $scope.url+="&parameter[]=so2";
+                }
+            }
+
+            if(searchParams[2] === true){
+                if(count === 1){
+                    $scope.url += "&parameter=pm25";
+                }
+                else{
+                    $scope.url+="&parameter[]=pm25";
+                }
+            }
+            if(searchParams[3] === true){
+                if(count === 1){
+                    $scope.url += "&parameter=pm10";
+                }
+                else{
+                    $scope.url+="&parameter[]=pm10";
+                }
+            }
+            if(searchParams[4] === true){
+                if(count === 1){
+                    $scope.url += "&parameter=o3";
+                }
+                else{
+                    $scope.url+="&parameter[]=o3";
+                }
+            }
+            if(searchParams[5] === true){
+                if(count === 1){
+                    $scope.url += "&parameter=no2";
+                }
+                else{
+                    $scope.url+="&parameter[]=no2";
+                }
+            }
+            if(searchParams[6] === true){
+                if(count === 1){
+                    $scope.url += "&parameter=bc";
+                }
+                else{
+                    $scope.url+="&parameter[]=bc";
+                }
+            }
+        }
+        console.log($scope.url);
+
     }
 });
 
