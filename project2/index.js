@@ -247,6 +247,7 @@ app.controller('ctr1', function ($scope) {
     }
 
     $scope.request = function (date_picker,value_input) {
+
         //This sets these variables so we are able to check them when building the URL...
         $scope.date_picker = date_picker;
         $scope.value_input = value_input;
