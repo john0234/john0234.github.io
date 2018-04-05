@@ -180,7 +180,7 @@ app.controller('ctr1', function ($scope) {
                             $scope.latlng = {lat: $scope.data.coordinates.latitude, lng:$scope.data.coordinates.longitude};
                             $scope.formatted_JSON.particle = $scope.data.parameter;
                             $scope.formatted_JSON.measurement = $scope.data.value;
-                            $scope.formatted_JSON.date = $scope.data.date;
+                            $scope.formatted_JSON.date = "04/4/2018";
                             $scope.formatted_JSON.coords = "" + $scope.data.coordinates.latitude + "," + $scope.data.coordinates.longitude;
 
                             addMarker($scope.latlng);
@@ -209,7 +209,7 @@ app.controller('ctr1', function ($scope) {
                         $scope.latlng = {lat: $scope.data.coordinates.latitude, lng:$scope.data.coordinates.longitude};
                         $scope.formatted_JSON.particle = $scope.data.parameter;
                         $scope.formatted_JSON.measurement = $scope.data.value;
-                        $scope.formatted_JSON.date = $scope.data.date;
+                        $scope.formatted_JSON.date = "04/4/2018";
                         $scope.formatted_JSON.coords = "" + $scope.data.coordinates.latitude + "," + $scope.data.coordinates.longitude;
 
                         addMarker($scope.latlng);
@@ -249,7 +249,7 @@ app.controller('ctr1', function ($scope) {
                                 $scope.latlng = {lat: $scope.data.coordinates.latitude, lng:$scope.data.coordinates.longitude};
                                 $scope.formatted_JSON.particle = $scope.data.parameter;
                                 $scope.formatted_JSON.measurement = $scope.data.value;
-                                $scope.formatted_JSON.date = $scope.data.date;
+                                $scope.formatted_JSON.date = "04/4/2018";
                                 $scope.formatted_JSON.coords = "" + $scope.data.coordinates.latitude + "," + $scope.data.coordinates.longitude;
 
                                 addMarker($scope.latlng);
