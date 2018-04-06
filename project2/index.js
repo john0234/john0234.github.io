@@ -206,9 +206,9 @@ app.controller('ctr1', function ($scope) {
                 //puts data from current result into JSON format to use to interate through table
                 $scope.formatted_JSON = {particle:'',measurement:'',date:'',coords:''};
                 $scope.formatted_JSON.particle = $scope.data.parameter;
-                $scope.formatted_JSON.measurement = $scope.data.value;
+                $scope.formatted_JSON.measurement = $scope.data.value +" "+$scope.data.unit;
                 $scope.formatted_JSON.date = utcToString($scope.data.date.utc);
-                $scope.formatted_JSON.coords = "" + $scope.data.coordinates.latitude + "," + $scope.data.coordinates.longitude;
+                $scope.formatted_JSON.coords = $scope.data.location;//"" + $scope.data.coordinates.latitude + "," + $scope.data.coordinates.longitude;
 
                 $scope.measurements.push($scope.formatted_JSON);
             }
