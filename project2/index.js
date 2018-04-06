@@ -228,45 +228,45 @@ app.controller('ctr1', function ($scope) {
 
                 $scope.measurements.push($scope.formatted_JSON);
             }
-
-            $scope.markerCluster = new MarkerClusterer($scope.map, markers,
-                {
-                    styles: [
-                        {
-                            textColor: 'white',
-                            url: 'm/m1.png',
-                            height: 52,
-                            width: 53
-                        },
-                        {
-                            textColor: 'white',
-                            url: 'm/m2.png',
-                            height: 55,
-                            width: 56
-                        },
-                        {
-                            textColor: 'white',
-                            url: 'm/m3.png',
-                            height: 65,
-                            width: 66
-                        },
-                        {
-                            textColor: 'white',
-                            url: 'm/m4.png',
-                            height: 77,
-                            width: 78
-                        },
-                        {
-                            textColor: 'white',
-                            url: 'm/m5.png',
-                            height: 89,
-                            width: 90
-                        }
-                    ]
-                });
-
             $scope.$apply();
         });
+/*
+        $scope.markerCluster = new MarkerClusterer($scope.map, markers,
+            {
+                styles: [
+                    {
+                        textColor: 'white',
+                        url: 'm/m1.png',
+                        height: 52,
+                        width: 53
+                    },
+                    {
+                        textColor: 'white',
+                        url: 'm/m2.png',
+                        height: 55,
+                        width: 56
+                    },
+                    {
+                        textColor: 'white',
+                        url: 'm/m3.png',
+                        height: 65,
+                        width: 66
+                    },
+                    {
+                        textColor: 'white',
+                        url: 'm/m4.png',
+                        height: 77,
+                        width: 78
+                    },
+                    {
+                        textColor: 'white',
+                        url: 'm/m5.png',
+                        height: 89,
+                        width: 90
+                    }
+                ]
+            });
+*/
 
     }
 
@@ -287,7 +287,6 @@ app.controller('ctr1', function ($scope) {
 
     function buildURL(){
         //TODO: grab the inputs from the $scope.request
-
         $scope.url = "https://api.openaq.org/v1/measurements?coordinates="+ $scope.map.getCenter().lat()+","+ $scope.map.getCenter().lng()+"&radius="+$scope.radius;
 
 
