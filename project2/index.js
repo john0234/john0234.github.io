@@ -3,6 +3,8 @@
 // <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places">
 
 var map;
+var markers=[];
+var markerLocations = [];
 
 function initMap() {
 
@@ -21,7 +23,6 @@ function initMap() {
         draggable: true,
         visible: false
     });
-
 
     var card = document.getElementById('pac-card');
     var input = document.getElementById('pac-input');
@@ -109,8 +110,6 @@ function geocodeLatLong(map,geocoder,infowindow,input){
 
 var app = angular.module('ngMapComponentsApp', []);
 
-var markers = [];
-var markerLocations = [];
 var infoWindows = [];
 
 function removeMarkers(){
@@ -208,18 +207,58 @@ app.controller('ctr1', function ($scope) {
                 $scope.formatted_JSON = {particle:'',measurement:'',date:'',coords:''};
                 $scope.formatted_JSON.particle = $scope.data.parameter;
                 $scope.formatted_JSON.measurement = $scope.data.value;
-                $scope.formatted_JSON.date = "04/4/2018";
+                $scope.formatted_JSON.date = utcToString($scope.data.date.utc);
                 $scope.formatted_JSON.coords = "" + $scope.data.coordinates.latitude + "," + $scope.data.coordinates.longitude;
 
                 $scope.measurements.push($scope.formatted_JSON);
             }
             $scope.$apply();
         });
+
+        $scope.markerCluster = new MarkerClusterer($scope.map, markers,
+            {
+                styles: [
+                    {
+                        textColor: 'white',
+                        url: 'm/m1.png',
+                        height: 52,
+                        width: 53
+                    },
+                    {
+                        textColor: 'white',
+                        url: 'm/m2.png',
+                        height: 55,
+                        width: 56
+                    },
+                    {
+                        textColor: 'white',
+                        url: 'm/m3.png',
+                        height: 65,
+                        width: 66
+                    },
+                    {
+                        textColor: 'white',
+                        url: 'm/m4.png',
+                        height: 77,
+                        width: 78
+                    },
+                    {
+                        textColor: 'white',
+                        url: 'm/m5.png',
+                        height: 89,
+                        width: 90
+                    }
+                ]
+            });
+
+
     }
 
-    $scope.request = function (map,date_picker,from_value,to_value,arr) {
+    $scope.request = function (map,date_from,date_to,from_value,to_value,arr) {
         //This sets these variables so we are able to check them when building the URL...
-        $scope.date_picker = date_picker;
+        $scope.date_from = date_from;
+        $scope.date_to = date_to;
+
         $scope.from_value = from_value;
         $scope.to_value = to_value;
         $scope.map = map;
@@ -233,7 +272,7 @@ app.controller('ctr1', function ($scope) {
     function buildURL(){
         //TODO: grab the inputs from the $scope.request
 
-        $scope.url = "https://api.openaq.org/v1/measurements?coordinates="+ $scope.map.getCenter().lat()+","+ $scope.map.getCenter().lng()+"&radius="+$scope.radius+"&date_from="+"2018-4-4";
+        $scope.url = "https://api.openaq.org/v1/measurements?coordinates="+ $scope.map.getCenter().lat()+","+ $scope.map.getCenter().lng()+"&radius="+$scope.radius;
 
 
         if($scope.from_value !== undefined){
@@ -244,10 +283,13 @@ app.controller('ctr1', function ($scope) {
             $scope.url += "&value_to="+$scope.to_value
         }
 
-        if($scope.date_picker !== undefined){
-            //$scope.url += "" //TODO: double check API, sift through data & stuff
+        if($scope.date_from !== undefined){
 
-            console.log($scope.date_picker);
+            $scope.url+="&date_from="+dateString($scope.date_from);
+        }
+
+        if($scope.date_to !== undefined){
+            $scope.url+="&date_to="+dateString($scope.date_to);
         }
 
 
@@ -322,6 +364,40 @@ app.controller('ctr1', function ($scope) {
 
         console.log($scope.url);
     }
+
+    function dateString(date){
+
+        var month = date.getMonth()+1;
+        var day = date.getDate();
+
+        var minutes = date.getMinutes();
+        var hours = date.getHours();
+
+        if(month < 10){
+            month = '0'+month;
+        }
+        if(day < 10){
+            day = '0'+day;
+        }
+        if(hours < 10){
+            hours = '0'+hours;
+        }
+        if(minutes < 10){
+            minutes = '0'+minutes;
+        }
+
+        console.log(date.getFullYear()+"-"+month+"-"+day+"T"+hours+":"+minutes+":00");
+        return date.getFullYear()+"-"+month+"-"+day+"T"+hours+":"+minutes+":00";
+
+    }
+
+    function utcToString(date){
+
+        return date.substring(0,10)+" "+date.substring(11,19);
+
+    }
+
+
 
 });
 

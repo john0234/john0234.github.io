@@ -9,6 +9,11 @@ html, body {
     margin: 0;
     padding: 0;
 }
+
+body{
+    background-image: url('index.jpg'); background-repeat: no-repeat; background-attachment:fixed; background-size: cover
+}
+
 #description {
     font-family: Roboto;
     font-size: 15px;
@@ -90,4 +95,7 @@ th{
     border: 1px solid black;
     margin-left: 5px;
     text-align: center;
+
 }
+
+tr:nth-child(even) {background-color: #f2f2f2;}
