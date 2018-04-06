@@ -112,14 +112,28 @@ var app = angular.module('ngMapComponentsApp', []);
 
 var infoWindows = [];
 
-function removeMarkers(){
-    for (var i = 0; i < markers.length; i++) {
-        markers[i].setMap(null);
-    }
-    markers = [];
-}
+
+
 
 app.controller('ctr1', function ($scope) {
+
+    function removeMarkers(){
+
+        for (var i = 0; i < markers.length; i++) {
+            markers[i].setMap(null);
+        }
+        markers = [];
+        markerLocations=[];
+
+/*
+        for(i=0;i<markers.length;i++){
+            var distance = google.maps.geometry.spherical.computeDistanceBetween($scope.map.getCenter(), markers[i].getPosition());
+            if(distance > $scope.radius){
+                markers.splice(i,1);
+            }
+        }
+*/
+    }
 
     var searchParams = [];
     for(i = 0; i < 7; i ++){
@@ -189,7 +203,6 @@ app.controller('ctr1', function ($scope) {
     }
 
     function dragReset() {
-
         removeMarkers();
         $scope.measurements = [];
         buildURL();
@@ -201,8 +214,11 @@ app.controller('ctr1', function ($scope) {
                 $scope.data=data.results[i];
                 $scope.latlng = {lat: $scope.data.coordinates.latitude, lng:$scope.data.coordinates.longitude};
                 //adds marker of current result
-                addMarker($scope.latlng);
+                //addMarker($scope.latlng);
 
+                //if($.inArray($scope.latlng, markerLocations) < 0){
+                    addMarker($scope.latlng);
+                //}
                 //puts data from current result into JSON format to use to interate through table
                 $scope.formatted_JSON = {particle:'',measurement:'',date:'',coords:''};
                 $scope.formatted_JSON.particle = $scope.data.parameter;
@@ -212,45 +228,45 @@ app.controller('ctr1', function ($scope) {
 
                 $scope.measurements.push($scope.formatted_JSON);
             }
+
+            $scope.markerCluster = new MarkerClusterer($scope.map, markers,
+                {
+                    styles: [
+                        {
+                            textColor: 'white',
+                            url: 'm/m1.png',
+                            height: 52,
+                            width: 53
+                        },
+                        {
+                            textColor: 'white',
+                            url: 'm/m2.png',
+                            height: 55,
+                            width: 56
+                        },
+                        {
+                            textColor: 'white',
+                            url: 'm/m3.png',
+                            height: 65,
+                            width: 66
+                        },
+                        {
+                            textColor: 'white',
+                            url: 'm/m4.png',
+                            height: 77,
+                            width: 78
+                        },
+                        {
+                            textColor: 'white',
+                            url: 'm/m5.png',
+                            height: 89,
+                            width: 90
+                        }
+                    ]
+                });
+
             $scope.$apply();
         });
-
-        $scope.markerCluster = new MarkerClusterer($scope.map, markers,
-            {
-                styles: [
-                    {
-                        textColor: 'white',
-                        url: 'm/m1.png',
-                        height: 52,
-                        width: 53
-                    },
-                    {
-                        textColor: 'white',
-                        url: 'm/m2.png',
-                        height: 55,
-                        width: 56
-                    },
-                    {
-                        textColor: 'white',
-                        url: 'm/m3.png',
-                        height: 65,
-                        width: 66
-                    },
-                    {
-                        textColor: 'white',
-                        url: 'm/m4.png',
-                        height: 77,
-                        width: 78
-                    },
-                    {
-                        textColor: 'white',
-                        url: 'm/m5.png',
-                        height: 89,
-                        width: 90
-                    }
-                ]
-            });
-
 
     }
 
@@ -362,7 +378,8 @@ app.controller('ctr1', function ($scope) {
             }
         }
 
-        console.log($scope.url);
+        $scope.url+="&limit=10000"
+        //console.log($scope.url);
     }
 
     function dateString(date){
@@ -386,7 +403,7 @@ app.controller('ctr1', function ($scope) {
             minutes = '0'+minutes;
         }
 
-        console.log(date.getFullYear()+"-"+month+"-"+day+"T"+hours+":"+minutes+":00");
+        //console.log(date.getFullYear()+"-"+month+"-"+day+"T"+hours+":"+minutes+":00");
         return date.getFullYear()+"-"+month+"-"+day+"T"+hours+":"+minutes+":00";
 
     }
