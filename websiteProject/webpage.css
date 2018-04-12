@@ -1,0 +1,35 @@
+body{
+
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-image: url("background.jpg");
+
+}
+
+img{
+    width: 100%;
+    height: auto;
+}
+
+p{
+    color: black;
+}
+
+a:hover{
+    text-decoration: none;
+    font-weight: bolder;
+}
+
+a, a:hover, a:active, a:visited, a:focus {
+    text-decoration:none;
+}
+
+
+.background_div{
+    background-color: white;
+    opacity: .75;
+    border: 1px solid black;
+    border-radius: 15px;
+    font-size: 1.25em;
+}

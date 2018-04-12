@@ -1,0 +1,1 @@
+This is a side project that I am creating to display my photography 
