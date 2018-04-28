@@ -1,289 +1,62 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="en" ng-app="project3">
 <head>
     <meta charset="UTF-8">
-    <title>Productivity Website</title>
-    <link rel="stylesheet" type="text/css" href="index.css">
-</head>
+    <title>Search Page</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" href="index.css">
 
-<body>
-    <div id="header">
-        <nav>
-            <a id="left" href="index.html" style="float: left">TODO LIST</a>
-            <a id="right" href="pictures.html" style="float: right">Motivational Pictures</a>
-        </nav>
+</head>
+<body ng-controller="ctrl">
+
+    <nav class="navbar navbar-inverse">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">IMDB DB</a>
+            </div>
+            <ul class="nav navbar-nav">
+                <li class="active"><a href="/">Search</a></li>
+                <li><a href="about_us_page/index.html">About Us</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container">
+
+        <h1 class="page-header" style="text-align: center">Search Page</h1>
+
+        <div class="row">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <input id="searchbox" type="text" ng-model="searchBox">
+                <select ng-model="select" value="People">
+                    <option value="People">People</option>
+                    <option value="Titles">Titles</option>
+                </select>
+                <button type="button" class="btn btn-secondary" ng-click="submit(searchBox,select)">Submit</button>
+            </div>
+        </div>
+
+        <div class="row">
+            <h1 class="page-header" style="text-align: center">Results</h1>
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <table>
+                    <!--TODO: NG-Repeat for how many rows we have in the array that will hold the movie titles/people...
+                        TODO: Each element in the array should have 2 things: 1)primary_name 2)href should point to new page, which we will pass x.name(or the movie id)-->
+                    <tr ng-repeat="row in rows">
+                        <td><a ng-href="/{{row.pg}}?const={{row.const}}">{{row.field0}}, {{row.field1}}, {{row.field2}}, {{row.field3}}</a></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
     </div>
 
-    <h1>TODO LIST</h1>
-
-    <h2>Add A Category:</h2>
-    <input id="addCat" type="=text" placeholder="Enter A Category">
-    <input id="colorPicker" type="color">
-    <button class="thisButton" onclick="addCategory()">ADD</button>
-
-    <h2>Add An Item:</h2>
-    <input id="Description" type="text" placeholder="Enter A Description">
-
-
-    <select id="pickOne">
-    </select>
-
-    <input type="datetime-local" id="datepicker">
-
-    <button class="thisButton" onclick="buttonClick()">ADD</button>
-
-
-
-    <table id="table">
-    </table>
-
-    <!--
-        TODO: style everything
-        TODO: add cookie implementation(if you have time).
-     -->
-
-    <script type="text/javascript">
-
-        //keep track of what row we are on.
-        var rowNum = 0;
-
-        //this is the object array that is printed into the table.
-        var rowArray = [];
-
-        //This is the category array.
-        var catArray = [];
-        //These are the four starting categories.
-        catArray.push({category:"Chore",color:"#FF0000"});
-        catArray.push({category:"Homework",color:"#ff845b"});
-        catArray.push({category:"Appointment",color:"#5b84ff"});
-        catArray.push({category:"Notes",color:"#fae705"});
-
-        //All of these variables are grabbing objects in the html
-        var textbox = document.getElementById("Description");
-        var table = document.getElementById("table");
-        var pickOne = document.getElementById("pickOne");
-        var datepicker = document.getElementById("datepicker");
-
-        //These Variables deal with the category stuff
-        var catTextField = document.getElementById("addCat");
-        var colorpicker = document.getElementById("colorPicker");
-
-
-
-        //This determines what happens when the webpage opens.
-        window.onload = function () {
-            updatePickOne();
-            reloadTable();
-            textbox.focus();
-        };
-
-        //All of this happens when you click the add to-do button.
-        function buttonClick() {
-            //building the object that we are putting into the object array.
-            var row = {description: "", dateAdded:"", dueDate: "", category: "", finished: ""};
-            var description = textbox.value;
-
-            if(description===""){
-                alert("Please enter a task description.");
-                textbox.focus();
-                return;
-            }
-
-            var category = pickOne.value;
-
-            //THIS IS ALL FOR GETTING CURRENT DATE AND TIME...
-            var today = new Date();
-            var dd = today.getDate();
-            var mm = today.getMonth()+1;
-            var yyyy = today.getFullYear();
-            var hour = today.getHours();
-            var min = today.getMinutes();
-            if(dd<10) {
-                dd = '0'+dd
-            }
-            if(mm<10) {
-                mm = '0'+mm
-            }
-            if(hour<10){
-                hour = '0'+hour;
-            }
-            if(min<10){
-                min='0'+min;
-            }
-            var string = yyyy + '-' + mm + "-" + dd + " "+ hour + ":" + min;
-            //THIS IS ALL FOR GETTING CURRENT DATE AND TIME
-
-            row.description = description;
-            row.dateAdded = string;
-
-            //This formats the date.
-            row.dueDate = datepicker.value;
-            row.dueDate=row.dueDate.replace("T"," ");
-
-
-            row.category = category;
-
-            //Set the finished variable to 0 since it is not done yet.(since you just added it)
-            row.finished = 0;
-
-            //add object to object array
-            rowArray.push(row);
-
-            //reload the table to show the changes
-            reloadTable();
-
-            //reset everything back to default values.
-            textbox.value = "";
-            pickOne.value = "Chore";
-            textbox.focus();
-
-            //increment to show we are on the next row.
-            rowNum++;
-        }
-
-        //This handles the checking of the boxes and goes threw the object array to change the value of the finished variable.
-        function handleClick(cb) {
-            if(cb.checked === true){
-                rowArray[cb.id].finished = 1;
-            }else{
-                rowArray[cb.id].finished = 0;
-            }
-        }
-
-        function addCategory(){
-            var catStuff ={category:"",color:""};
-            catStuff.color = colorpicker.value;
-            catStuff.category = catTextField.value;
-
-            if(catStuff.category===""){
-                alert("Please enter the name of the category that you would like to add.")
-                return;
-            }
-
-            catArray.push(catStuff);
-            updatePickOne();
-            catTextField.value = "";
-
-        }
-
-        //************************Below this are sort functions and print functions.************************
-
-        function updatePickOne() {
-            pickOne.innerHTML = "";
-            for(i=0;i<catArray.length;i++){
-                pickOne.innerHTML += "<option value="+catArray[i].category+">"+catArray[i].category+"</option>"
-            }
-        }
-
-        function sortAddTime(){
-            rowArray.sort(compareAddTime);
-            reloadTable();
-        }
-
-        function remove(bt) {
-            var blah = window.confirm("Are you sure you would like to remove that item?");
-            if(blah){
-                rowArray.splice(bt.className, 1);
-                reloadTable();
-            }
-        }
-
-        function sortDescription(){
-
-            rowArray.sort(compareDescription);
-            reloadTable();
-        }
-
-        function sortComplete(){
-            rowArray.sort(compareComplete);
-            reloadTable();
-        }
-
-        function sortDate(){
-            rowArray.sort(compareDate);
-            reloadTable();
-        }
-
-        function sortCategory(){
-            rowArray.sort(compareCategory);
-            reloadTable();
-        }
-
-        function compareDescription(a,b) {
-            if (a.description < b.description)
-                return -1;
-            if (a.description > b.description)
-                return 1;
-            return 0;
-        }
-
-        function compareDate(a,b) {
-            if (a.dueDate < b.dueDate)
-                return -1;
-            if (a.dueDate > b.dueDate)
-                return 1;
-            return 0;
-        }
-
-        function compareComplete(a,b) {
-            if (a.finished < b.finished)
-                return 1;
-            if (a.finished > b.finished)
-                return -1;
-            return 0;
-        }
-
-        function compareCategory(a,b) {
-            if (a.category < b.category)
-                return -1;
-            if (a.category > b.category)
-                return 1;
-            return 0;
-        }
-
-        function compareAddTime(a,b){
-            if (a.dateAdded < b.dateAdded)
-                return 1;
-            if (a.dateAdded > b.dateAdded)
-                return -1;
-            return 0;
-        }
-
-        function reloadTable() {
-            table.innerHTML = "<tr>\n" +
-                "            <th onclick="+"sortDescription()"+">Description:</th>\n" +
-                "            <th onclick="+"sortAddTime()"+">Date Added:</th>\n" +
-                "            <th onclick="+"sortDate()"+">Due Date:</th>\n" +
-                "            <th onclick="+"sortCategory()"+">Category:</th>\n" +
-                "            <th onclick="+"sortComplete()"+">Complete:</th>\n" +
-                "            <th id='remove'>Remove:</th>" +
-                "        </tr>";
-
-            for (var j = 0; j < rowArray.length; j++) {
-
-                if (rowArray[j].finished === 0) {
-                    var adsf = colorize(rowArray[j].category);
-                    table.innerHTML += "<tr style=background-color:"+adsf+"><td>" + rowArray[j].description + "</td><td>" + rowArray[j].dateAdded + "</td><td>" + rowArray[j].dueDate + "</td><td>" + rowArray[j].category + "</td><td class='completed'><input type='checkbox' class='checkbox' id='" + j + "' onclick='handleClick(this);'></td><td><button onclick='remove(this)' class="+j+">Remove</button></td></tr>";
-
-                }//if
-                else {
-                    var adsf = colorize(rowArray[j].category);
-                    table.innerHTML += "<tr style=background-color:"+adsf+"><td>" + rowArray[j].description + "</td><td>" + rowArray[j].dateAdded + "</td><td>" + rowArray[j].dueDate + "</td><td>" + rowArray[j].category + "</td><td class='completed'><input type='checkbox' class='checkbox' id='" + j + "' onclick='handleClick(this);' checked></td><td><button onclick='remove(this)' class="+j+">Remove</button></td></tr>";
-
-                }
-            }
-        }
-
-        function colorize(category){
-            for(i=0;i<catArray.length;i++){
-
-                if(catArray[i].category === category){
-                    return catArray[i].color;
-                }
-            }
-        }
-
-    </script>
+    <script
+            src="http://code.jquery.com/jquery-3.3.1.min.js"
+            integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+            crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <script src="index.js"></script>
 </body>
 </html>
